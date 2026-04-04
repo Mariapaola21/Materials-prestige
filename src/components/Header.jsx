@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
 import useScrollDirection from "../hooks/useScrollDirection";
+
+const navLinks = [
+  { to: "/", label: "Home" },
+  { to: "/proyectos", label: "Proyectos" },
+  { to: "/proyecto-3d", label: "3D" },
+  { to: "/materiales", label: "Materiales" },
+  { to: "/servicios-premium", label: "Servicio Premium" },
+];
 
 export default function Header({ onDrawerToggle }) {
   const { scrollDirection, isTop } = useScrollDirection();
@@ -38,31 +47,38 @@ export default function Header({ onDrawerToggle }) {
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <div
+
+        <NavLink
+          to="/"
           className={`font-headline font-light tracking-[0.3em] text-lg transition-colors duration-500 ${
             isTop ? "text-[#fbf9f4]" : "text-[#31332c] dark:text-[#fbf9f4]"
           }`}
         >
           LINEA PRESTIGE
-        </div>
+        </NavLink>
+
         <div className="flex items-center gap-6">
           <nav className="hidden md:flex gap-8">
-            <a
-              className={`font-headline tracking-[0.2em] uppercase text-sm hover:opacity-70 transition-all duration-300 ${
-                isTop ? "text-[#fbf9f4]/80" : "text-[#735a3a]"
-              }`}
-              href="#"
-            >
-              The Atelier
-            </a>
-            <a
-              className={`font-headline tracking-[0.2em] uppercase text-sm hover:opacity-70 transition-all duration-300 ${
-                isTop ? "text-[#fbf9f4]/50" : "text-[#31332c]/60"
-              }`}
-              href="#proyectos"
-            >
-              Collections
-            </a>
+            {navLinks.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === "/"}
+                className={({ isActive }) =>
+                  `font-headline tracking-[0.2em] uppercase text-sm hover:opacity-70 transition-all duration-300 ${
+                    isActive
+                      ? isTop
+                        ? "text-[#fbf9f4]"
+                        : "text-[#735a3a]"
+                      : isTop
+                      ? "text-[#fbf9f4]/60"
+                      : "text-[#31332c]/60"
+                  }`
+                }
+              >
+                {label}
+              </NavLink>
+            ))}
           </nav>
           <button
             className={`hover:opacity-70 transition-opacity duration-300 active:scale-95 ${
@@ -74,7 +90,6 @@ export default function Header({ onDrawerToggle }) {
         </div>
       </div>
 
-      {/* Scroll Progress Bar */}
       <div
         className="scroll-progress"
         style={{

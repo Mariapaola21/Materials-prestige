@@ -1,11 +1,19 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
+
+const navLinks = [
+  { icon: "home_mini", label: "Home", to: "/" },
+  { icon: "grid_view", label: "Proyectos", to: "/proyectos" },
+  { icon: "view_in_ar", label: "3D", to: "/proyecto-3d" },
+  { icon: "layers", label: "Materiales", to: "/materiales" },
+  { icon: "star", label: "Servicio Premium", to: "/servicios-premium" },
+];
 
 export default function Drawer({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             className="fixed inset-0 bg-on-surface/40 backdrop-blur-sm z-[59]"
             initial={{ opacity: 0 }}
@@ -13,7 +21,6 @@ export default function Drawer({ isOpen, onClose }) {
             exit={{ opacity: 0 }}
             onClick={onClose}
           />
-          {/* Panel */}
           <motion.aside
             className="fixed top-0 left-0 h-full w-80 bg-surface-container-low shadow-2xl shadow-on-surface/10 z-[60] flex flex-col p-8 gap-6"
             initial={{ x: "-100%" }}
@@ -33,27 +40,25 @@ export default function Drawer({ isOpen, onClose }) {
               </button>
             </div>
             <nav className="flex flex-col gap-1">
-              {[
-                { icon: "architecture", label: "The Atelier" },
-                { icon: "chair", label: "Collections", active: false },
-                { icon: "layers", label: "Bespoke Process", active: true },
-                { icon: "menu_book", label: "Journal" },
-                { icon: "mail", label: "Contact" },
-              ].map((item) => (
-                <a
-                  key={item.label}
-                  className={`font-headline text-lg tracking-wide py-3 px-4 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 hover:bg-primary/5 ${
-                    item.active
-                      ? "text-primary font-semibold bg-primary/5"
-                      : "text-on-surface/70 hover:text-on-surface"
-                  }`}
-                  href="#"
+              {navLinks.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === "/"}
+                  onClick={onClose}
+                  className={({ isActive }) =>
+                    `font-headline text-lg tracking-wide py-3 px-4 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 hover:bg-primary/5 ${
+                      isActive
+                        ? "text-primary font-semibold bg-primary/5"
+                        : "text-on-surface/70 hover:text-on-surface"
+                    }`
+                  }
                 >
                   <span className="material-symbols-outlined text-xl">
                     {item.icon}
                   </span>
                   {item.label}
-                </a>
+                </NavLink>
               ))}
             </nav>
             <div className="mt-auto pt-6 border-t border-outline-variant/20">
